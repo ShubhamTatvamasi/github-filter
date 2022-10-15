@@ -2,6 +2,7 @@
 
 source token
 GITHUB_ORG=magma
+GITHUB_REPO=magma
 DEFAULT_MEMBERS_PER_PAGE=30
 
 # list all members from the github organization
@@ -24,10 +25,15 @@ while true; do
 
 done
 
-
-for i in ${GITHUB_MEMBERS}
+# list last commit from all users
+for AUTHOR in ${GITHUB_MEMBERS}
 do
-   echo "$i"
+  COMMITS=$(curl -s \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+  https://api.github.com/repos/${GITHUB_ORG}/${GITHUB_REPO}/commits?author=${AUTHOR})
+  COMMIT_DATE=$(echo ${COMMITS} | jq '.[0].commit.author.date' -r)
+  COMMIT_URL=$(echo ${COMMITS} | jq '.[0].html_url' -r)
+  echo "${COMMIT_URL} | ${COMMIT_DATE} | ${AUTHOR}"
+
 done
-
-
