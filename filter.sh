@@ -28,6 +28,7 @@ done
 # list last commit from all users
 for AUTHOR in ${GITHUB_MEMBERS}
 do
+
   COMMITS=$(curl -s \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
